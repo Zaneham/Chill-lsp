@@ -145,7 +145,7 @@ The extension includes a complete CHILL to C transpiler. Because sometimes under
 
 **Use cases:**
 - **Code understanding** - See what legacy CHILL actually does in readable C
-- **Modernization** - Port switch logic to modern Linux systems
+- **Modernisation** - Port switch logic to modern Linux systems
 - **Testing** - Run transpiled code on development machines
 - **Training** - Learn CHILL semantics through C equivalents
 
