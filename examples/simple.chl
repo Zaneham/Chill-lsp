@@ -1,0 +1,59 @@
+/*
+ * Simple CHILL Example
+ * Demonstrates basic language features
+ */
+
+MODULE demo;
+
+DCL counter INT := 0;
+DCL message CHARS(30) := "Hello CHILL!";
+
+-- Simple procedure
+increment: PROC(x INT) RETURNS(INT);
+    DCL res INT;
+    res := x + 1;
+    RETURN res;
+END increment;
+
+-- Control flow example
+classify: PROC(n INT) RETURNS(INT);
+    DCL category INT;
+
+    IF n < 0 THEN
+        category := -1;
+    ELSIF n = 0 THEN
+        category := 0;
+    ELSE
+        category := 1;
+    FI;
+
+    RETURN category;
+END classify;
+
+-- Loop example
+sum_to_n: PROC(n INT) RETURNS(INT);
+    DCL i INT;
+    DCL total INT := 0;
+
+    DO FOR i := 1 TO n;
+        total := total + i;
+    OD;
+
+    RETURN total;
+END sum_to_n;
+
+-- Main entry
+main_proc: PROC();
+    DCL x INT;
+    DCL i INT;
+
+    x := increment(counter);
+    x := classify(x);
+    x := sum_to_n(10);
+
+    DO WHILE x > 0;
+        x := x - 1;
+    OD;
+END main_proc;
+
+END demo;

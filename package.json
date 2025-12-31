@@ -2,7 +2,7 @@
   "name": "chill-lsp",
   "displayName": "CHILL (ITU-T Z.200) Telecom Language",
   "description": "Language Server Protocol support for CHILL (ITU-T Z.200) - the language running the world's telephone networks",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "author": "Zane Hambly",
   "license": "Apache-2.0",
   "publisher": "ZaneHambly",
@@ -57,6 +57,47 @@
         "path": "./syntaxes/chill.tmLanguage.json"
       }
     ],
+    "commands": [
+      {
+        "command": "chill.compileToC",
+        "title": "CHILL: Compile to C",
+        "icon": "$(file-code)"
+      },
+      {
+        "command": "chill.compileToCSave",
+        "title": "CHILL: Compile to C (Save to File)",
+        "icon": "$(save)"
+      }
+    ],
+    "menus": {
+      "editor/title": [
+        {
+          "command": "chill.compileToC",
+          "when": "resourceLangId == chill",
+          "group": "navigation"
+        }
+      ],
+      "editor/context": [
+        {
+          "command": "chill.compileToC",
+          "when": "resourceLangId == chill",
+          "group": "1_chill"
+        },
+        {
+          "command": "chill.compileToCSave",
+          "when": "resourceLangId == chill",
+          "group": "1_chill"
+        }
+      ]
+    },
+    "keybindings": [
+      {
+        "command": "chill.compileToC",
+        "key": "ctrl+shift+c",
+        "mac": "cmd+shift+c",
+        "when": "resourceLangId == chill"
+      }
+    ],
     "configuration": {
       "type": "object",
       "title": "CHILL",
@@ -70,6 +111,11 @@
           "type": "string",
           "default": "",
           "description": "Path to chill_lsp_server.py (leave empty to use bundled)"
+        },
+        "chill.compilerPath": {
+          "type": "string",
+          "default": "",
+          "description": "Path to CHILL compiler directory (leave empty to use bundled)"
         },
         "chill.trace.server": {
           "type": "string",
