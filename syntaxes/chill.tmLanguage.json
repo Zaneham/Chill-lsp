@@ -91,11 +91,11 @@
       "patterns": [
         {
           "name": "keyword.control.chill",
-          "match": "\\b(IF|THEN|ELSE|ELSIF|FI|CASE|ESAC|DO|OD|WHILE|FOR|BY|TO|DOWN|UP|EVER|CYCLE|EXIT|GOTO|RETURN|STOP|CONTINUE|ASSERT)\\b"
+          "match": "\\b(IF|THEN|ELSE|ELSIF|FI|CASE|ESAC|DO|OD|WHILE|FOR|BY|TO|DOWN|UP|EVER|CYCLE|EXIT|GOTO|RETURN|STOP|CONTINUE|ASSERT|STEP)\\b"
         },
         {
           "name": "keyword.control.structure.chill",
-          "match": "\\b(BEGIN|END|MODULE|SPEC|BODY|CONTEXT|REGION|ON|TIMEOUT|AFTER|AT|DELAY|PRIORITY|EXCEPTIONS)\\b"
+          "match": "\\b(BEGIN|END|MODULE|SPEC|BODY|CONTEXT|REGION|ON|TIMEOUT|AFTER|AT|DELAY|PRIORITY|EXCEPTIONS|TASK)\\b"
         },
         {
           "name": "keyword.control.process.chill",
@@ -103,11 +103,19 @@
         },
         {
           "name": "keyword.other.chill",
-          "match": "\\b(AND|OR|NOT|XOR|ANDIF|ORIF|MOD|REM|IN|OF|WITH|ALL|THIS|SELF)\\b"
+          "match": "\\b(AND|OR|NOT|XOR|ANDIF|ORIF|MOD|REM|IN|OF|WITH|ALL|THIS|SELF|ANY|BIN|NEW|POS)\\b"
         },
         {
           "name": "keyword.control.visibility.chill",
           "match": "\\b(GRANT|SEIZE|PREFIXED|REMOTE)\\b"
+        },
+        {
+          "name": "keyword.other.oop.chill",
+          "match": "\\b(ABSTRACT|BASED_ON|CONSTR|DESTR|FINAL|GENERIC|IMPLEMENTS|INCOMPLETE|INTERFACE|INVARIANT|REIMPLEMENT)\\b"
+        },
+        {
+          "name": "keyword.other.constraint.chill",
+          "match": "\\b(ANY_ASSIGN|ANY_DISCRETE|ANY_INT|ANY_REAL|ASSIGNABLE|NOT_ASSIGNABLE|PRE|POST)\\b"
         }
       ]
     },
@@ -115,11 +123,11 @@
       "patterns": [
         {
           "name": "storage.type.chill",
-          "match": "\\b(DCL|NEWMODE|SYNMODE|SYN|PROC|PROCESS|SIGNAL|BUFFER|EVENT)\\b"
+          "match": "\\b(DCL|NEWMODE|SYNMODE|SYN|PROC|PROCESS|SIGNAL|BUFFER|EVENT|MODE)\\b"
         },
         {
           "name": "storage.type.primitive.chill",
-          "match": "\\b(INT|BOOL|CHAR|CHARS|BOOLS|BYTE|UBYTE|UINT|LONG|ULONG|REAL|LONG_REAL|DURATION|TIME|ASSOCIATION|INSTANCE)\\b"
+          "match": "\\b(INT|BOOL|CHAR|CHARS|BOOLS|WCHARS|WTEXT|BYTE|UBYTE|UINT|LONG|ULONG|REAL|LONG_REAL|DURATION|TIME|ASSOCIATION|INSTANCE)\\b"
         },
         {
           "name": "storage.type.composite.chill",
