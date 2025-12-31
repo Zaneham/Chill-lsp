@@ -1,0 +1,100 @@
+{
+  "name": "chill-lsp",
+  "displayName": "CHILL Language Support",
+  "description": "Language Server Protocol support for CHILL (ITU-T Z.200) - the language running the world's telephone networks",
+  "version": "1.0.0",
+  "author": "Zane Hambly",
+  "license": "Apache-2.0",
+  "publisher": "ZaneHambly",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Zaneham/chill-lsp"
+  },
+  "engines": {
+    "vscode": "^1.75.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Linters"
+  ],
+  "keywords": [
+    "chill",
+    "ccitt",
+    "itu-t",
+    "z200",
+    "telecom",
+    "ewsd",
+    "siemens",
+    "telephone",
+    "legacy"
+  ],
+  "activationEvents": [
+    "onLanguage:chill"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "languages": [
+      {
+        "id": "chill",
+        "aliases": [
+          "CHILL",
+          "chill",
+          "CCITT High Level Language"
+        ],
+        "extensions": [
+          ".chl",
+          ".chill",
+          ".ch",
+          ".spc"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "chill",
+        "scopeName": "source.chill",
+        "path": "./syntaxes/chill.tmLanguage.json"
+      }
+    ],
+    "configuration": {
+      "type": "object",
+      "title": "CHILL",
+      "properties": {
+        "chill.pythonPath": {
+          "type": "string",
+          "default": "python",
+          "description": "Path to Python interpreter for LSP server"
+        },
+        "chill.serverPath": {
+          "type": "string",
+          "default": "",
+          "description": "Path to chill_lsp_server.py (leave empty to use bundled)"
+        },
+        "chill.trace.server": {
+          "type": "string",
+          "enum": [
+            "off",
+            "messages",
+            "verbose"
+          ],
+          "default": "off",
+          "description": "Traces communication between VS Code and the CHILL language server"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./"
+  },
+  "dependencies": {
+    "vscode-languageclient": "^8.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^18.0.0",
+    "@types/vscode": "^1.75.0",
+    "typescript": "^5.0.0"
+  }
+}

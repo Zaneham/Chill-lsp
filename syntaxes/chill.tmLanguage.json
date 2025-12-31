@@ -1,0 +1,240 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "CHILL",
+  "scopeName": "source.chill",
+  "patterns": [
+    { "include": "#comments" },
+    { "include": "#strings" },
+    { "include": "#numbers" },
+    { "include": "#keywords" },
+    { "include": "#types" },
+    { "include": "#operators" },
+    { "include": "#declarations" },
+    { "include": "#builtins" },
+    { "include": "#identifiers" }
+  ],
+  "repository": {
+    "comments": {
+      "patterns": [
+        {
+          "name": "comment.block.chill",
+          "begin": "/\\*",
+          "end": "\\*/",
+          "comment": "Block comments /* */"
+        },
+        {
+          "name": "comment.line.double-dash.chill",
+          "match": "--.*$",
+          "comment": "Line comments --"
+        }
+      ]
+    },
+    "strings": {
+      "patterns": [
+        {
+          "name": "string.quoted.single.chill",
+          "begin": "'",
+          "end": "'",
+          "patterns": [
+            {
+              "name": "constant.character.escape.chill",
+              "match": "''"
+            }
+          ]
+        },
+        {
+          "name": "string.quoted.double.chill",
+          "begin": "\"",
+          "end": "\"",
+          "patterns": [
+            {
+              "name": "constant.character.escape.chill",
+              "match": "\"\""
+            }
+          ]
+        }
+      ]
+    },
+    "numbers": {
+      "patterns": [
+        {
+          "name": "constant.numeric.float.chill",
+          "match": "\\b\\d+\\.\\d+([Ee][+-]?\\d+)?\\b"
+        },
+        {
+          "name": "constant.numeric.integer.chill",
+          "match": "\\b\\d+\\b"
+        },
+        {
+          "name": "constant.numeric.binary.chill",
+          "match": "\\bB'[01]+'\\b",
+          "comment": "Binary literals B'01101'"
+        },
+        {
+          "name": "constant.numeric.hex.chill",
+          "match": "\\bH'[0-9A-Fa-f]+'\\b",
+          "comment": "Hex literals H'FF'"
+        },
+        {
+          "name": "constant.numeric.octal.chill",
+          "match": "\\bO'[0-7]+'\\b",
+          "comment": "Octal literals O'77'"
+        },
+        {
+          "name": "constant.numeric.char.chill",
+          "match": "\\bC'.'\\b",
+          "comment": "Character literals C'A'"
+        }
+      ]
+    },
+    "keywords": {
+      "patterns": [
+        {
+          "name": "keyword.control.chill",
+          "match": "\\b(IF|THEN|ELSE|ELSIF|FI|CASE|ESAC|DO|OD|WHILE|FOR|BY|TO|DOWN|UP|EVER|CYCLE|EXIT|GOTO|RETURN|STOP|CONTINUE|ASSERT)\\b"
+        },
+        {
+          "name": "keyword.control.structure.chill",
+          "match": "\\b(BEGIN|END|MODULE|SPEC|BODY|CONTEXT|REGION|ON|TIMEOUT|AFTER|AT|DELAY|PRIORITY|EXCEPTIONS)\\b"
+        },
+        {
+          "name": "keyword.control.process.chill",
+          "match": "\\b(START|STOP|SEND|RECEIVE|CAUSE|FORBID|TERMINATE)\\b"
+        },
+        {
+          "name": "keyword.other.chill",
+          "match": "\\b(AND|OR|NOT|XOR|ANDIF|ORIF|MOD|REM|IN|OF|WITH|ALL|THIS|SELF)\\b"
+        },
+        {
+          "name": "keyword.control.visibility.chill",
+          "match": "\\b(GRANT|SEIZE|PREFIXED|REMOTE)\\b"
+        }
+      ]
+    },
+    "types": {
+      "patterns": [
+        {
+          "name": "storage.type.chill",
+          "match": "\\b(DCL|NEWMODE|SYNMODE|SYN|PROC|PROCESS|SIGNAL|BUFFER|EVENT)\\b"
+        },
+        {
+          "name": "storage.type.primitive.chill",
+          "match": "\\b(INT|BOOL|CHAR|CHARS|BOOLS|BYTE|UBYTE|UINT|LONG|ULONG|REAL|LONG_REAL|DURATION|TIME|ASSOCIATION|INSTANCE)\\b"
+        },
+        {
+          "name": "storage.type.composite.chill",
+          "match": "\\b(SET|RANGE|POWERSET|STRUCT|ARRAY|REF|ROW|ACCESS|TEXT)\\b"
+        },
+        {
+          "name": "storage.modifier.chill",
+          "match": "\\b(STATIC|DYNAMIC|LOC|READ|INIT|PACK|NOPACK|VARYING|GENERAL|INLINE|SIMPLE|RECURSIVE)\\b"
+        },
+        {
+          "name": "storage.modifier.parameter.chill",
+          "match": "\\b(IN|OUT|INOUT|RETURNS|RESULT|NONREF)\\b"
+        }
+      ]
+    },
+    "operators": {
+      "patterns": [
+        {
+          "name": "keyword.operator.comparison.chill",
+          "match": "(=|/=|<|>|<=|>=)"
+        },
+        {
+          "name": "keyword.operator.arithmetic.chill",
+          "match": "(\\+|-|\\*|/|\\*\\*)"
+        },
+        {
+          "name": "keyword.operator.assignment.chill",
+          "match": ":="
+        },
+        {
+          "name": "keyword.operator.reference.chill",
+          "match": "->"
+        },
+        {
+          "name": "keyword.operator.range.chill",
+          "match": ":"
+        }
+      ]
+    },
+    "declarations": {
+      "patterns": [
+        {
+          "match": "\\b(DCL)\\s+([A-Za-z_][A-Za-z0-9_]*)",
+          "captures": {
+            "1": { "name": "storage.type.chill" },
+            "2": { "name": "variable.other.chill" }
+          }
+        },
+        {
+          "match": "\\b(NEWMODE|SYNMODE)\\s+([A-Za-z_][A-Za-z0-9_]*)",
+          "captures": {
+            "1": { "name": "storage.type.chill" },
+            "2": { "name": "entity.name.type.chill" }
+          }
+        },
+        {
+          "match": "\\b(SYN)\\s+([A-Za-z_][A-Za-z0-9_]*)",
+          "captures": {
+            "1": { "name": "storage.type.chill" },
+            "2": { "name": "constant.other.chill" }
+          }
+        },
+        {
+          "match": "\\b([A-Za-z_][A-Za-z0-9_]*)\\s*:\\s*(PROC)\\b",
+          "captures": {
+            "1": { "name": "entity.name.function.chill" },
+            "2": { "name": "storage.type.chill" }
+          }
+        },
+        {
+          "match": "\\b([A-Za-z_][A-Za-z0-9_]*)\\s*:\\s*(PROCESS)\\b",
+          "captures": {
+            "1": { "name": "entity.name.function.chill" },
+            "2": { "name": "storage.type.chill" }
+          }
+        },
+        {
+          "match": "\\b(SIGNAL)\\s+([A-Za-z_][A-Za-z0-9_]*)",
+          "captures": {
+            "1": { "name": "storage.type.chill" },
+            "2": { "name": "entity.name.type.chill" }
+          }
+        },
+        {
+          "match": "\\b(MODULE)\\s+([A-Za-z_][A-Za-z0-9_]*)",
+          "captures": {
+            "1": { "name": "keyword.control.structure.chill" },
+            "2": { "name": "entity.name.namespace.chill" }
+          }
+        }
+      ]
+    },
+    "builtins": {
+      "patterns": [
+        {
+          "name": "support.function.chill",
+          "match": "\\b(ABS|ABSTIME|ALLOCATE|ARCCOS|ARCSIN|ARCTAN|ASSOCIATE|CARD|CONNECT|COS|CREATE|DELETE|DISCONNECT|DISSOCIATE|EOLN|EXISTING|EXP|EXPIRED|FIRST|FLOAT|GETASSOCIATION|GETSTACK|GETTEXTACCESS|GETTEXTINDEX|GETTEXTRECORD|GETUSAGE|INDEXABLE|INTTIME|ISASSOCIATED|LAST|LENGTH|LN|LOG|LOWER|MAX|MIN|MODIFY|NUM|OUTOFFILE|PRED|READACCESS|READRECORD|READTEXT|SEQUENCIBLE|SIN|SIZE|SQRT|SUCC|TAN|TRUNC|UPPER|USAGE|VARIABLE|WRITEACCESS|WRITERECORD|WRITETEXT)\\b"
+        },
+        {
+          "name": "constant.language.chill",
+          "match": "\\b(TRUE|FALSE|NULL)\\b"
+        },
+        {
+          "name": "support.constant.time.chill",
+          "match": "\\b(DAYS|HOURS|MINUTES|SECONDS|MILLISECS|MICROSECS)\\b"
+        }
+      ]
+    },
+    "identifiers": {
+      "patterns": [
+        {
+          "name": "variable.other.chill",
+          "match": "\\b[A-Za-z_][A-Za-z0-9_]*\\b"
+        }
+      ]
+    }
+  }
+}

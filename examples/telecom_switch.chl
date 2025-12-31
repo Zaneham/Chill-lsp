@@ -1,0 +1,187 @@
+/*
+ * CHILL Telephone Switch Example
+ * A simplified call processing module
+ *
+ * This demonstrates CHILL constructs used in EWSD and similar
+ * telephone switching systems.
+ *
+ * Note: Real EWSD code is proprietary and vastly more complex.
+ * This is a teaching example only.
+ */
+
+MODULE call_processor;
+
+-- Mode definitions
+NEWMODE call_state = SET(idle, dialing, ringing, connected,
+                         busy, disconnected, error);
+
+NEWMODE subscriber_id = RANGE(0:9999999);  -- 7-digit subscriber number
+NEWMODE trunk_id = RANGE(0:65535);
+
+NEWMODE call_record = STRUCT(
+    caller subscriber_id,
+    callee subscriber_id,
+    state call_state,
+    start_time TIME,
+    trunk trunk_id
+);
+
+NEWMODE tone_type = SET(dial_tone, ring_tone, busy_tone,
+                        error_tone, silence);
+
+-- Constants
+SYN max_calls = 1000;
+SYN ring_timeout = 30 SECONDS;
+SYN dial_timeout = 10 SECONDS;
+
+-- Global variables
+DCL active_calls ARRAY(0:max_calls) call_record;
+DCL call_count INT := 0;
+
+-- Signals for inter-process communication
+SIGNAL digit_received(subscriber_id, INT);
+SIGNAL offhook(subscriber_id);
+SIGNAL onhook(subscriber_id);
+SIGNAL ring_answer(subscriber_id);
+SIGNAL timeout_expired(subscriber_id);
+
+-- Buffer for incoming call requests
+DCL call_queue BUFFER(100) call_record;
+
+/*
+ * Find an available call slot
+ */
+find_slot: PROC() RETURNS(INT);
+    DCL i INT;
+
+    DO FOR i := 0 TO max_calls;
+        IF active_calls(i).state = idle THEN
+            RETURN i;
+        FI;
+    OD;
+
+    RETURN -1;  -- No slots available
+END find_slot;
+
+/*
+ * Apply a tone to a subscriber line
+ */
+apply_tone: PROC(sub subscriber_id, tone tone_type);
+    -- Hardware interface would go here
+    -- This would write to the EWSD Line Interface Card
+    CASE tone OF
+        (dial_tone): /* Apply 350+440 Hz */;
+        (ring_tone): /* Apply ringing cadence */;
+        (busy_tone): /* Apply 480+620 Hz */;
+        (error_tone): /* Apply reorder tone */;
+        (silence): /* Disconnect tone generator */;
+    ESAC;
+END apply_tone;
+
+/*
+ * Main call processing process
+ * One instance per subscriber line
+ */
+line_handler: PROCESS(line_id subscriber_id);
+    DCL current_state call_state := idle;
+    DCL dialed_digits CHARS(20) := '';
+    DCL slot_index INT := -1;
+
+    DO EVER;
+        CASE current_state OF
+            (idle):
+                RECEIVE CASE
+                    (offhook):
+                        slot_index := find_slot();
+                        IF slot_index >= 0 THEN
+                            apply_tone(line_id, dial_tone);
+                            current_state := dialing;
+                            dialed_digits := '';
+                        ELSE
+                            apply_tone(line_id, busy_tone);
+                        FI;
+                ESAC;
+
+            (dialing):
+                RECEIVE CASE
+                    (digit_received(line_id, digit)):
+                        -- Accumulate dialed digits
+                        apply_tone(line_id, silence);
+                        -- digit processing would go here
+                        IF LENGTH(dialed_digits) >= 7 THEN
+                            -- Complete number dialed
+                            current_state := ringing;
+                        FI;
+                    (onhook):
+                        -- Abandoned call
+                        apply_tone(line_id, silence);
+                        current_state := idle;
+                    (timeout_expired(line_id)):
+                        -- Dial timeout
+                        apply_tone(line_id, error_tone);
+                        current_state := error;
+                ESAC;
+
+            (ringing):
+                RECEIVE CASE
+                    (ring_answer):
+                        apply_tone(line_id, silence);
+                        current_state := connected;
+                        active_calls(slot_index).state := connected;
+                        active_calls(slot_index).start_time := ABSTIME();
+                    (onhook):
+                        apply_tone(line_id, silence);
+                        current_state := idle;
+                    (timeout_expired(line_id)):
+                        apply_tone(line_id, busy_tone);
+                        current_state := busy;
+                ESAC;
+
+            (connected):
+                RECEIVE CASE
+                    (onhook):
+                        -- Call ended
+                        apply_tone(line_id, silence);
+                        active_calls(slot_index).state := disconnected;
+                        current_state := idle;
+                ESAC;
+
+            (busy):
+                RECEIVE CASE
+                    (onhook):
+                        apply_tone(line_id, silence);
+                        current_state := idle;
+                ESAC;
+
+            (error):
+                RECEIVE CASE
+                    (onhook):
+                        apply_tone(line_id, silence);
+                        current_state := idle;
+                ESAC;
+
+            (disconnected):
+                current_state := idle;
+        ESAC;
+    OD;
+END line_handler;
+
+/*
+ * Billing record generator
+ */
+billing_handler: PROCESS();
+    DCL record call_record;
+    DCL duration DURATION;
+
+    DO EVER;
+        RECEIVE call_queue IN record;
+
+        IF record.state = disconnected THEN
+            duration := ABSTIME() - record.start_time;
+            -- Write billing record to database
+            -- Real implementation would use ASSOCIATION for file I/O
+        FI;
+    OD;
+END billing_handler;
+
+END call_processor;

@@ -1,0 +1,174 @@
+/*
+ * CHILL Type Definitions Example
+ * Demonstrates mode definitions typical in telecom systems
+ *
+ * Based on patterns from EWSD and similar switching systems.
+ */
+
+MODULE ewsd_types;
+
+-- Grant these types for use by other modules
+GRANT line_state, trunk_state, subscriber_info, call_data;
+GRANT error_code, alarm_severity;
+
+/*
+ * Line States
+ * Represents the state machine for a subscriber line
+ */
+NEWMODE line_state = SET(
+    ls_idle,            -- Line idle, waiting for activity
+    ls_offhook,         -- Subscriber has picked up handset
+    ls_dial_tone,       -- Dial tone being applied
+    ls_digits,          -- Receiving dialed digits
+    ls_routing,         -- Call being routed
+    ls_alerting,        -- Ringing far end
+    ls_connected,       -- Call in progress
+    ls_disconnecting,   -- Call teardown in progress
+    ls_blocked,         -- Line blocked for maintenance
+    ls_oos              -- Out of service
+);
+
+/*
+ * Trunk States
+ * Similar to line states but for inter-exchange trunks
+ */
+NEWMODE trunk_state = SET(
+    ts_idle,
+    ts_seized,          -- Trunk seized for outgoing call
+    ts_incoming,        -- Incoming call on trunk
+    ts_connected,
+    ts_releasing,
+    ts_blocked,
+    ts_oos
+);
+
+/*
+ * Error Codes
+ * System error classification
+ */
+NEWMODE error_code = RANGE(0:9999);
+
+-- Well-known error codes
+SYN err_none = 0;
+SYN err_no_resource = 100;
+SYN err_timeout = 200;
+SYN err_protocol = 300;
+SYN err_hardware = 400;
+SYN err_config = 500;
+
+/*
+ * Alarm Severity
+ * For operations and maintenance
+ */
+NEWMODE alarm_severity = SET(
+    sev_cleared,        -- Alarm cleared
+    sev_warning,        -- Warning condition
+    sev_minor,          -- Minor alarm
+    sev_major,          -- Major alarm
+    sev_critical        -- Critical alarm - immediate attention
+);
+
+/*
+ * Subscriber Information
+ * Data associated with a subscriber line
+ */
+NEWMODE subscriber_info = STRUCT(
+    directory_number CHARS(15),     -- E.164 number
+    line_type SET(analog, isdn_ba, isdn_pra),
+    features POWERSET SET(
+        call_waiting,
+        call_forwarding,
+        caller_id,
+        three_way,
+        voicemail
+    ),
+    class_of_service RANGE(0:255),
+    language SET(english, german, french, spanish)
+);
+
+/*
+ * Call Data Record
+ * For billing and statistics
+ */
+NEWMODE call_data = STRUCT(
+    call_id CHARS(20),
+    calling_party CHARS(15),
+    called_party CHARS(15),
+    start_time TIME,
+    answer_time TIME,
+    end_time TIME,
+    duration DURATION,
+    call_type SET(
+        local_call,
+        long_distance,
+        international,
+        toll_free,
+        premium
+    ),
+    disposition SET(
+        completed,
+        busy,
+        no_answer,
+        failed,
+        abandoned
+    ),
+    trunk_group RANGE(0:9999),
+    route_index RANGE(0:255)
+);
+
+/*
+ * Signaling Protocol Data
+ * For various signaling systems
+ */
+NEWMODE ss7_point_code = STRUCT(
+    network RANGE(0:255),
+    cluster RANGE(0:255),
+    member RANGE(0:255)
+);
+
+NEWMODE isup_message = STRUCT(
+    cic RANGE(0:65535),             -- Circuit Identification Code
+    msg_type SET(
+        iam,    -- Initial Address Message
+        acm,    -- Address Complete Message
+        anm,    -- Answer Message
+        rel,    -- Release
+        rlc,    -- Release Complete
+        cpg     -- Call Progress
+    ),
+    opc ss7_point_code,
+    dpc ss7_point_code,
+    calling_party CHARS(15),
+    called_party CHARS(15)
+);
+
+/*
+ * Hardware Identifiers
+ * For addressing EWSD hardware components
+ */
+NEWMODE shelf_address = STRUCT(
+    cabinet RANGE(0:15),
+    shelf RANGE(0:15),
+    slot RANGE(0:31),
+    port RANGE(0:31)
+);
+
+NEWMODE ltg_id = STRUCT(
+    ltg_number RANGE(0:63),         -- Line/Trunk Group
+    lu_number RANGE(0:7),           -- Line Unit
+    channel RANGE(0:127)
+);
+
+/*
+ * Buffer Definitions
+ * For inter-process message passing
+ */
+DCL call_request_buffer BUFFER(1000) call_data;
+DCL alarm_buffer BUFFER(500) STRUCT(
+    timestamp TIME,
+    severity alarm_severity,
+    source CHARS(32),
+    message CHARS(256)
+);
+
+END ewsd_types;

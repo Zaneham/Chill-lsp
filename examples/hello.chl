@@ -1,0 +1,35 @@
+/*
+ * Hello World in CHILL
+ * The simplest possible CHILL program
+ *
+ * In a real EWSD or telecom switch, you wouldn't print
+ * "Hello World" - you'd route phone calls.
+ * But everyone starts somewhere.
+ */
+
+MODULE hello;
+
+-- Import text I/O
+SEIZE stdout;
+
+-- A simple greeting procedure
+greet: PROC(name CHARS(30));
+    DCL message CHARS(50);
+
+    message := 'Hello, ' // name // '!';
+    WRITETEXT(stdout, message);
+END greet;
+
+-- Main entry point (if there were one)
+main: PROC();
+    DCL greeting CHARS(20) := 'World';
+
+    greet(greeting);
+
+    -- Now try something more telecom-relevant
+    greet('EWSD');
+    greet('Telecom Engineer');
+    greet('Someone maintaining 200 million phone lines');
+END main;
+
+END hello;
