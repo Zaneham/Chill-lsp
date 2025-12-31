@@ -1,5 +1,7 @@
 # CHILL Language Server
 
+[![VS Code Marketplace](https://img.shields.io/visual-studio-marketplace/v/ZaneHambly.chill-lsp?label=VS%20Code%20Marketplace)](https://marketplace.visualstudio.com/items?itemName=ZaneHambly.chill-lsp)
+
 Language Server Protocol implementation for **CHILL** (CCITT High Level Language), the ITU-T programming language that has been quietly running the world's telephone networks since 1980.
 
 When you pick up a phone and dial a number, there is a non-trivial probability that CHILL code is involved in making that connection happen. You've never heard of it. Neither has anyone else. The phones work anyway.
