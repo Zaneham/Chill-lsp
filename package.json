@@ -1,6 +1,6 @@
 {
   "name": "chill-lsp",
-  "displayName": "CHILL Language Support",
+  "displayName": "CHILL (ITU-T Z.200) Telecom Language",
   "description": "Language Server Protocol support for CHILL (ITU-T Z.200) - the language running the world's telephone networks",
   "version": "1.0.0",
   "author": "Zane Hambly",

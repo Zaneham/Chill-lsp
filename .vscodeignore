@@ -8,3 +8,5 @@ tsconfig.json
 node_modules/@types/**
 node_modules/typescript/**
 *.vsix
+__pycache__/**
+**/*.pyc
