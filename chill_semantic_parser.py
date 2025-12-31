@@ -67,27 +67,32 @@ CHILL_RESERVED_WORDS = {
     'DESTR', 'REIMPLEMENT'
 }
 
-# Predefined names (built-in functions, constants, modes)
+# Predefined names from ITU-T Z.200 Appendix III.2
+# Plus implementation-defined extensions commonly found in EWSD and other systems
 CHILL_PREDEFINED = {
-    # Built-in functions
+    # Built-in functions (III.2)
     'ABS', 'ABSTIME', 'ALLOCATE', 'ARCCOS', 'ARCSIN', 'ARCTAN',
     'ASSOCIATE', 'CARD', 'CONNECT', 'COS', 'CREATE', 'DELETE',
     'DISCONNECT', 'DISSOCIATE', 'EOLN', 'EXISTING', 'EXP', 'EXPIRED',
     'FIRST', 'FLOAT', 'GETASSOCIATION', 'GETSTACK', 'GETTEXTACCESS',
     'GETTEXTINDEX', 'GETTEXTRECORD', 'GETUSAGE', 'INDEXABLE',
-    'INSTANCE', 'INTTIME', 'ISASSOCIATED', 'LAST', 'LENGTH', 'LN',
-    'LOG', 'LOWER', 'MAX', 'MIN', 'MODIFY', 'NUM', 'OUTOFFILE',
-    'PRED', 'READACCESS', 'READRECORD', 'READTEXT', 'SEQUENCIBLE',
-    'SIN', 'SIZE', 'SQRT', 'SUCC', 'TAN', 'TERMINATE', 'TRUNC',
-    'UPPER', 'USAGE', 'VARIABLE', 'WRITEACCESS', 'WRITERECORD',
-    'WRITETEXT',
-    # Built-in modes
-    'INT', 'BOOL', 'CHAR', 'BYTE', 'UBYTE', 'UINT', 'LONG', 'ULONG',
-    'REAL', 'LONG_REAL', 'DURATION', 'TIME', 'ASSOCIATION', 'INSTANCE',
-    # Constants
+    'INTTIME', 'ISASSOCIATED', 'LAST', 'LENGTH', 'LN', 'LOG', 'LOWER',
+    'MAX', 'MIN', 'MODIFY', 'NUM', 'OUTOFFILE', 'PRED', 'PTR',
+    'READABLE', 'READONLY', 'READRECORD', 'READTEXT', 'READWRITE',
+    'SAME', 'SEQUENCIBLE', 'SETTEXTACCESS', 'SETTEXTINDEX',
+    'SETTEXTRECORD', 'SIN', 'SIZE', 'SQRT', 'SUCC', 'TAN', 'TERMINATE',
+    'UPPER', 'USAGE', 'VARIABLE', 'WAIT', 'WCHAR', 'WHERE',
+    'WRITEABLE', 'WRITEONLY', 'WRITERECORD', 'WRITETEXT',
+    # Built-in modes (III.2)
+    'INT', 'BOOL', 'CHAR', 'DURATION', 'TIME', 'ASSOCIATION', 'INSTANCE',
+    # Implementation-defined modes (common in EWSD, GCC CHILL)
+    'BYTE', 'UBYTE', 'UINT', 'LONG', 'ULONG', 'REAL', 'LONG_REAL',
+    # Constants (III.2)
     'TRUE', 'FALSE', 'NULL',
-    # Time units
-    'DAYS', 'HOURS', 'MINUTES', 'SECONDS', 'MILLISECS', 'MICROSECS'
+    # Time units (III.2)
+    'DAYS', 'HOURS', 'MILLISECS', 'MINUTES', 'SECS',
+    # Implementation-defined time units
+    'SECONDS', 'MICROSECS'
 }
 
 # Operators
